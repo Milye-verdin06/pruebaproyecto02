@@ -1,11 +1,10 @@
-//Ruta api/alumnos
+//Ruta api/docentes
 
 const Router = require('express');
 const conString = require('../database/config');
 const sql = require('mssql');
 
 const router = Router();
-
 
 //Get All
 router.get('/', (req, res) => {
@@ -16,7 +15,7 @@ router.get('/', (req, res) => {
     });
     sql.connect(conString).then(pool => {
         return pool.request()
-            .execute('stp_alumnos_getall');
+            .execute('stp_docentes_getall');
 
     }).then(result => {
 
@@ -28,7 +27,6 @@ router.get('/', (req, res) => {
 
 });
 
-
 //Getbyid
 router.get('/:id', (req, res) => {
     sql.on('error', err => {
@@ -38,8 +36,8 @@ router.get('/:id', (req, res) => {
     });
     sql.connect(conString).then(pool => {
         return pool.request()
-            .input('idAlumno', req.params.id)
-            .execute('stp_alumnos_getbyid');
+            .input('idDocente', req.params.id)
+            .execute('stp_docentes_getbyid');
 
     }).then(result => {
 
@@ -51,6 +49,7 @@ router.get('/:id', (req, res) => {
 
 
 });
+
 //add
 router.post('/', (req, res) => {
     sql.on('error', err => {
@@ -62,23 +61,22 @@ router.post('/', (req, res) => {
         return pool.request()
             .input('nombre', req.body.nombre)
             .input('edad', req.body.edad)
-            .input('sexo', req.body.sexo)
-            .input('semestre', req.body.semestre)
-            .input('carrera', req.body.carrera)
+            .input('titulo', req.body.titulo)
+            .input('tipo', req.body.tipo)
             .input('activo', req.body.activo)
-            .execute('stp_alumnos_add');
+
+        .execute('stp_docentes_add');
 
     }).then(result => {
 
         res.status(201).json({
             status: "OK",
-            msg: "Alumno agregado correctamente"
+            msg: "Docente agregado correctamente"
         });
     }).catch(err => {
         res.json(err);
     });
 });
-
 
 //update
 router.put('/:id', (req, res) => {
@@ -89,27 +87,25 @@ router.put('/:id', (req, res) => {
     });
     sql.connect(conString).then(pool => {
         return pool.request()
-
-        .input('idAlumno', req.params.id)
+            .input('idDocente', req.params.id)
             .input('nombre', req.body.nombre)
             .input('edad', req.body.edad)
-            .input('sexo', req.body.sexo)
-            .input('semestre', req.body.semestre)
-            .input('carrera', req.body.carrera)
+            .input('titulo', req.body.titulo)
+            .input('tipo', req.body.tipo)
 
-        .execute('stp_alumnos_update');
+
+        .execute('stp_docentes_update');
 
     }).then(result => {
 
         res.status(201).json({
             status: "OK",
-            msg: "Alumno Modificado correctamente"
+            msg: "Docente modificado correctamente"
         });
     }).catch(err => {
         res.json(err);
     });
 });
-
 //delete
 router.delete('/:id', (req, res) => {
     sql.on('error', err => {
@@ -119,14 +115,14 @@ router.delete('/:id', (req, res) => {
     });
     sql.connect(conString).then(pool => {
         return pool.request()
-            .input('idAlumno', req.params.id)
-            .execute('stp_alumnos_delete');
+            .input('idDocente', req.params.id)
+            .execute('stp_docentes_delete');
 
     }).then(result => {
 
         res.status(201).json({
             status: "OK",
-            msg: "Alumno eliminado correctamente"
+            msg: "Docente eliminado correctamente"
         });
     }).catch(err => {
         res.json(err);
